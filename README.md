@@ -1,8 +1,9 @@
-## SOLAR_ENERGIA
+# solar_energia
 ### unexcoder
 
-# DATABASE STRUCTURE
+## DATABASE STRUCTURE
 
+```
 +-------------------------+
 | Tables_in_solar_energia |
 +-------------------------+
@@ -50,3 +51,4 @@
 | mime        | varchar(100) | NO   |     | NULL    |       |
 | nombre      | varchar(255) | NO   |     | NULL    |       |
 +-------------+--------------+------+-----+---------+-------+
+```
