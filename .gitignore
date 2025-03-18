@@ -1,0 +1,11 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### VS Code ###
+.vscode/
+
+### application.properties ###
+/Volumes/Archivo/LUIGI/work/dev/java_backend/102_integrador_spring/solar-energia/src/main/resources/application.properties
