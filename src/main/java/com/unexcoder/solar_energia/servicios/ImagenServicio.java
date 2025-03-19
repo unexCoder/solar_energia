@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.unexcoder.solar_energia.entidades.Imagen;
 import com.unexcoder.solar_energia.excepciones.ImagenNotFoundException;
+// import com.unexcoder.solar_energia.excepciones.InvalidOperationException;
+import com.unexcoder.solar_energia.repositorios.ArticuloRepositorio;
 import com.unexcoder.solar_energia.repositorios.ImagenRepositorio;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +21,18 @@ import org.slf4j.LoggerFactory;
 
 @Service
 public class ImagenServicio {
+
+    private final ArticuloRepositorio articuloRepositorio;
     
     @Autowired
     private ImagenRepositorio imagenRepositorio;
     private static final Logger logger = LoggerFactory.getLogger(ImagenServicio.class);
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png", "image/gif");
+
+    ImagenServicio(ArticuloRepositorio articuloRepositorio) {
+        this.articuloRepositorio = articuloRepositorio;
+    }
 
     @Transactional
     public Imagen guardarImagen(MultipartFile file, String descripcion) {
@@ -80,6 +88,12 @@ public class ImagenServicio {
         .orElseThrow(() -> new ImagenNotFoundException("Imagen no encontrada con el ID: " + id));
     }
 
+    @Transactional
+    public void eliminarImagen(UUID id) {
+        Imagen imagen = imagenRepositorio.findById(id)
+            .orElseThrow(() -> new ImagenNotFoundException("Imagen no encontrada con el ID: " + id));
+        imagenRepositorio.deleteById(imagen.getId());
+    }
 
     private void validarArchivo(MultipartFile file) {
         if (file == null || file.isEmpty()) {
