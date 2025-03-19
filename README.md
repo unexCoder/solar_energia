@@ -21,6 +21,7 @@
 | nombre_articulo | varchar(255)  | NO   |     | NULL    |       |
 | nro_articulo    | int           | NO   | UNI | NULL    |       |
 | fabrica_id      | binary(16)    | NO   | MUL | NULL    |       |
+| imagen_id       | binary(16)    | YES  | UNI | NULL    |       |
 +-----------------+---------------+------+-----+---------+-------+
 
 +--------+--------------+------+-----+---------+-------+

@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+// import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
@@ -31,6 +33,11 @@ public class Articulo {
     @NotNull(message = "El número de artículo no puede ser nulo")
     @Min(value = 1, message = "El número de artículo debe ser mayor o igual a 1")
     @Column(unique = true, nullable = false)
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "articulo_seq")
+    // @SequenceGenerator( name = "articulo_seq", 
+    //                     sequenceName = "articulo_sequence", 
+    //                     allocationSize = 1,
+    //                     initialValue = 1)
     private Integer nroArticulo;
 
     @NotNull(message = "El nombre del artículo no puede ser nulo")
@@ -42,6 +49,10 @@ public class Articulo {
     @Column(length = 1000, nullable = true)
     private String descripcion;
 
+    @OneToOne(cascade = CascadeType.ALL, optional = true) 
+    @JoinColumn(name = "imagen_id", referencedColumnName = "id", nullable = true)
+    private Imagen imagen;
+    
     // Fetch type LAZY is recommended for many-to-one relationships to improve performance.
     @NotNull(message = "La fábrica no puede ser nula")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
