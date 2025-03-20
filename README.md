@@ -1,5 +1,5 @@
 # solar_energia
-### unexcoder
+### ©2025 unexcoder
 
 ## web-store-app
 

@@ -1,4 +1,4 @@
-console.log('solar-energia')
+console.log('solar-energia\nweb-store-app\n©2025 unexcoder');
 
 function toggleNextField() {
     let password = document.getElementById("password").value;
