@@ -2,6 +2,7 @@ package com.unexcoder.solar_energia.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +21,16 @@ public class PortalControlador {
         return "index.html";
         // return "redirect:/login";
     }
+    
     @GetMapping("/registrar")
-    public String registrar() {
-        return "registro.html";
+    public String registrar(ModelMap model) {
+        model.put("form","users");
+        return "form.html";
     }
-
+    
     @PostMapping("/registro")
-    public String registro() {
-        return "registro.html";
+    public String registro(ModelMap model) {
+        model.put("form","users");
+        return "form.html";
     }
 }

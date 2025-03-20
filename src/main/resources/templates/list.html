@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace = "~{/fragments/head :: head}"> </head>
+
+<body style="background: #9a9a9a;">
+    <h1>SOLAR ⚡ ENERGIA</h1>
+
+    <div th:if="${list} == 'users'">
+        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
+        <h1>Lista de usuarios</h1>
+    </div>
+
+    <div th:if="${list} == 'fabrica'">
+        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
+        <h1>Lista de fabricantes</h1>
+    </div>
+
+    <div th:if="${list} == 'articulo'">
+        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
+        <h1>Lista de productos</h1>
+    </div>
+
+</body>
+</html>
