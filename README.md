@@ -1,6 +1,10 @@
 # solar_energia
 ### unexcoder
 
+## web-store-app
+
+## v.1.0.0
+
 ## DATABASE STRUCTURE
 
 ```
