@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace = "~{/fragments/head :: head}"> </head>
+
+<body style="background: #9a9a9a;">
+    <h1>SOLAR ⚡ ENERGIA</h1>
+
+    <div class="register">
+        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
+        <form th:action="@{/registro}" method="POST" enctype="multipart/form-data">
+
+            <div>
+                <img id="profileImage" class="registerimg" th:src="'/images/default_pic.png'" onclick="document.getElementById('file').click()"/>    
+                <input type="file" id="file" name="file" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                <p>Click to upload picture</p>
+            </div>
+            <div>
+                <input type="email" name="email" placeholder="email" th:value="${email}">
+            </div>
+            <div>
+                <input type="text"  name="apellido" placeholder="apellido" th:value="${apellido}">
+            </div>
+            <div>
+                <input type="text"  name="nombre" placeholder="name" th:value="${nombre}">
+            </div>
+            <div id="password">
+                <input type="password" name="password" placeholder="password"
+                    th:value="${password}" oninput="toggleNextField()">
+            </div>
+            <div id="passwordRepeat" style="display: none;">
+                <input type="password" name="passwordRepeat" placeholder="re-enter password"
+                    th:value="${password2}">
+            </div>
+
+            <button class="register-buttom" type="submit">Registrarme</button>
+        </form>
+    </div>
+
+</body>
+</html>
