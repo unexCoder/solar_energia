@@ -2,20 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace = "~{/fragments/head :: head}"> </head>
 
-<body style="background: #9a9a9a;">
-    <h1>SOLAR ⚡ ENERGIA</h1>
+<body>
+    <div th:replace = "~{/fragments/banner :: div}"> </div>
+    <header th:replace = "~{/fragments/header :: header}"> </header>
 
-    <div th:if="${list} == 'users'">
-        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
-        <h1>Lista de usuarios</h1>
+
+    <div th:if="${list} == 'users'" class="list-container">        
+        <h3>Lista de usuarios</h3>
         <div th:if="${users} != null">
-            <div th:each="user : ${users}" style="padding: 10px 20px;">
-                <div style="display: flex;">
-                    <img th:src="${user.imagen != null} ? @{'/imagen/perfil/' + ${user.id}} : '/images/default_pic.png'" alt="Profile Picture" width="150px" height="150px" style="padding-top: 22px; padding-right: 20px;"/>
+            <div th:each="user : ${users}" class="user-card">
+                <div class="user-card-content">
+                    <img th:src="${user.imagen != null} ? @{'/imagen/perfil/' + ${user.id}} : '/images/default_pic.png'" alt="Profile Picture" width="150px" height="150px"/>
                     <div>
-                        <h3 th:text="${user.id}"></h3>
+                        <h5 th:text="${user.id}"></h5>
                         <h3 th:text="${user.apellido}"></h3>
-                        <h3 th:text="${user.nombre}"></h3>
+                        <h4 th:text="${user.nombre}"></h4>
                         <h3 th:text="${user.email}"></h3>
                         <h3 th:text="${user.rol}"></h3>
                         <a th:href="@{/admin/dashboard/usuarios/__${user.id}__}"><i class="fas fa-feather-alt">
@@ -28,22 +29,31 @@
         </div>
     </div>
 
-    <div th:if="${list} == 'fabrica'">
-        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
-        <h1>Lista de fabricantes</h1>
+    <div th:if="${list} == 'fabrica'" class="container">
+        <h3>Lista de fabricantes</h3>
         <div th:if="${fabricas} != null" style="display: flex;flex-wrap: wrap;">
-            <div th:each="fabrica : ${fabricas}" style="display: flex; flex-direction: column;padding: 0 20px;">
+            <div th:each="fabrica : ${fabricas}" class="card">
                     <a th:href="@{/fabrica/editar/__${fabrica.id}__}">
                         <img th:src="${fabrica.imagen != null} ? @{'/imagen/' + ${fabrica.id}} : '/images/default_product.jpg'" alt="Brand Picture" style="width: 200px;"/>
                         <h3 th:text="${fabrica.nombre}"></h3>
                     </a>
-                </div>
+            </div>
         </div>
     </div>
 
-    <div th:if="${list} == 'articulo'">
-        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
-        <h1>Lista de productos</h1>
+    <div th:if="${list} == 'articulo'" class="list-container">
+        <h3>Lista de productos</h3>
+        <div th:if="${articulos} != null">
+            <div th:each="producto : ${articulos}" class="product-card">
+                <a th:href="@{/articulo/editar/__${producto.id}__}" class="product-card-content">
+                    <img th:src="${producto.imagen != null} ? @{'/imagen/articulo/' + ${producto.id}} : '/images/default_product.jpg'" alt="Product Picture" width="200px"/>
+                    <div>
+                        <h3 th:text="${producto.nombreArticulo}"></h3>
+                        <p th:text="${producto.descripcion}"></p>
+                    </div>
+                </a>
+                </div>
+        </div>
     </div>
     
 </body>

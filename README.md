@@ -1,11 +1,51 @@
-# solar_energia
-©2025 unexcoder
 
+
+
+# Solar Energía ⚡
+## v.0.0.1
+©2025 unexcoder
 ## web-store-app
 
-## v.1.0.0
+Solar Energía is a web-based store application built with **Spring Boot** and **Thymeleaf**. It allows users to manage articles, manufacturers, and images while providing secure user authentication and role-based access control.
 
-## DATABASE STRUCTURE
+---
+
+## Table of Contents
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Database Structure](#database-structure)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [License](#license)
+
+---
+
+## Features
+- **User Management**: Register, edit profiles, and manage user roles (Admin/User).
+- **Article Management**: Create, edit, and list articles with associated manufacturers and images.
+- **Manufacturer Management**: Manage manufacturers and their associated data.
+- **Image Uploads**: Upload and display images for articles and manufacturers.
+- **Secure Authentication**: Role-based access control using Spring Security.
+- **Responsive Design**: User-friendly interface built with Thymeleaf templates.
+
+---
+
+## Technologies Used
+- **Backend**: Spring Boot 3.4.3
+  - Spring Boot Starter Web
+  - Spring Boot Starter Data JPA
+  - Spring Boot Starter Security
+- **Frontend**: Thymeleaf with Spring Security Extras
+- **Database**: MySQL
+- **Build Tool**: Maven
+- **Java Version**: 17
+- **Other Libraries**:
+  - Lombok
+  - Jakarta Validation API
+
+---
+
+## Database Structure
 
 ```
 +-------------------------+
@@ -58,3 +98,16 @@
 | nombre      | varchar(255) | NO   |     | NULL    |       |
 +-------------+--------------+------+-----+---------+-------+
 ```
+
+## Setup Instructions
+
+### Prerequisites
+- Java 17 or higher
+- Maven
+- MySQL database
+
+### Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/solar-energia.git
+   cd solar-energia

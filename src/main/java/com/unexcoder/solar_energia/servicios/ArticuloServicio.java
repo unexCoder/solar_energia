@@ -124,16 +124,20 @@ public class ArticuloServicio {
         }
     }
 
-    // @Transactional(readOnly = true)
-    // public List<Articulo> listarArticulos() {
-    //     return articuloRepositorio.findAll();
-    // }
+    @Transactional(readOnly = true)
+    public List<Articulo> listarArticulos() {
+        return articuloRepositorio.findAll();
+    }
     @Transactional(readOnly = true)
     public Page<Articulo> listarArticulosPaginados(int page, int size) {
         logger.info("Listando artículos - Página: {}, Tamaño: {}", page, size);
         return articuloRepositorio.findAll(PageRequest.of(page, size));
     }
-
+    @Transactional(readOnly = true)
+    public Articulo getOne(UUID id) throws NotFoundException {
+        return articuloRepositorio.findById(id)
+                .orElseThrow(() -> new NotFoundException("No se encontró el artículo con el ID: " + id));
+    } 
     // Initialized Counter from Database
     // Instead of always starting at 1, it now retrieves the highest nroArticulo 
     // from the database and continues from there.

@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.unexcoder.solar_energia.entidades.Articulo;
 import com.unexcoder.solar_energia.entidades.Fabrica;
+import com.unexcoder.solar_energia.excepciones.InvalidOperationException;
+import com.unexcoder.solar_energia.excepciones.NotFoundException;
 import com.unexcoder.solar_energia.excepciones.ValidationException;
 import com.unexcoder.solar_energia.servicios.ArticuloServicio;
 import com.unexcoder.solar_energia.servicios.FabricaServicio;
@@ -68,19 +72,27 @@ public class ArticuloControlador {
 
     @GetMapping("/lista")
     public String listar(ModelMap model) {
+        // List<Articulo> productos = articuloServicio.listarArticulosPaginados(1, 10).getContent();
+        List<Articulo> productos = articuloServicio.listarArticulos();
         model.put("list","articulo");
+        model.addAttribute("articulos",productos);
         return "list.html";
     }
     
-    @GetMapping("/editar")
-    public String editar( ModelMap model) {
+    @GetMapping("/editar/{id}")
+    public String editar( @PathVariable String id, ModelMap model) throws NotFoundException {
         model.put("edit","articulo");
-        return "edit.html";
+        List<Fabrica> fabricas = fabricaServicio.listarFabricas();
+        model.addAttribute("fabricas", fabricas);
+        model.put("producto",articuloServicio.getOne(UUID.fromString(id)));
+        return "form.html";
     }
     
-    @PostMapping("/editar")
-    public String editado(ModelMap model) {
+    @PostMapping("/editar/{id}")
+    public String editado(@PathVariable String id, @RequestParam String nombre,@RequestParam String descripcion,
+    @RequestParam MultipartFile file,@RequestParam String fabricaId,ModelMap model) throws ValidationException, NotFoundException, InvalidOperationException {
+        articuloServicio.editarArticulo(UUID.fromString(id),nombre, descripcion, UUID.fromString(fabricaId), file, false);
         model.put("edit","articulo");
-        return "edit.html";
+        return "redirect:/articulo/lista";
     }    
 }

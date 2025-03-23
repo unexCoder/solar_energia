@@ -1,0 +1,92 @@
+/* 1. Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Technor', sans-serif;
+  background: #b0b0b0;
+  color: #00535b;
+}
+
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    background: #fff;
+    height: 2.2em;
+}
+
+a {
+    color: #00535b;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+a:hover {
+    color: #00a0b0;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em 1.4em;
+}
+
+.navbar {
+    display: flex;
+}
+
+.navbar div {
+    padding: 0 0.5em;
+}
+
+.navbar div a{
+    padding: 0 0.2em;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 1.5em;
+}
+
+.container .card {
+    display: flex;
+    flex-direction: column;
+    padding:0 20px 0 0;
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 1.5em;
+}
+
+.user-card, .product-card {
+    padding: 10px 0;
+}
+
+.user-card-content, .product-card-content {
+    display: flex;
+    flex-direction: row;
+    background: #999;
+}
+
+.user-card-content div {
+    padding: 0 0.5em;
+}
+.product-card-content div {
+    padding: 0 0.5em;
+}

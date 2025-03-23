@@ -10,4 +10,5 @@ public class SolarEnergiaApplication {
 		SpringApplication.run(SolarEnergiaApplication.class, args);
 	}
 
+	// https://kit-solar.com.ar/producto/panel-solar-185w-monocristalino/
 }
