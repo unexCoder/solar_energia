@@ -49,16 +49,16 @@ public class ArticuloServicio {
     }
 
     @Transactional
-    public void crearArticulo(String nombre, String descripcion, MultipartFile file, Fabrica fabrica) throws ValidationException {
+    public void crearArticulo(String nombre, String descripcion, MultipartFile file, UUID fabricaId) throws ValidationException {
         // validations
-        validar(nombre, descripcion, fabrica);
+        validar(nombre, descripcion, fabricaId);
         validarArchivo(file);
         try {
             Articulo articulo = new Articulo();
             articulo.setNroArticulo(generateId());
             articulo.setNombreArticulo(nombre);
             articulo.setDescripcion(descripcion);
-            articulo.setFabrica(fabrica);
+            articulo.setFabrica(fabricaRepositorio.getReferenceById(fabricaId));
             if (file != null && !file.isEmpty()) {
                 Imagen img = imagenServicio.guardarImagen(file, sanitizarDescripcion(descripcion,500));
                 articulo.setImagen(img);            
@@ -71,8 +71,8 @@ public class ArticuloServicio {
     }
 
     @Transactional
-    public void editarArticulo(UUID id ,String nombre, String descripcion, Fabrica fabrica, MultipartFile file, boolean eliminarImagen) throws ValidationException,NotFoundException,InvalidOperationException {
-        validar(nombre, descripcion, fabrica);
+    public void editarArticulo(UUID id ,String nombre, String descripcion, UUID fabricaId, MultipartFile file, boolean eliminarImagen) throws ValidationException,NotFoundException,InvalidOperationException {
+        validar(nombre, descripcion, fabricaId);
 
         Articulo articulo = articuloRepositorio.findById(id)
             .orElseThrow(() -> new NotFoundException("No se encontró el artículo con el ID: " + id));
@@ -97,7 +97,8 @@ public class ArticuloServicio {
             }    
             articulo.setNombreArticulo(nombre);
             articulo.setDescripcion(descripcion);
-            articulo.setFabrica(fabrica);
+            Fabrica f = fabricaRepositorio.getReferenceById(fabricaId);
+            articulo.setFabrica(f);
             articuloRepositorio.save(articulo);
         } catch (Exception e) {
             logger.error("Error actualizando artículo ID {}: {}", id, e.getMessage(), e);
@@ -171,7 +172,7 @@ public class ArticuloServicio {
         return "";
     }
 
-    private void validar(String nombre, String descripcion, Fabrica fabrica) throws ValidationException {
+    private void validar(String nombre, String descripcion, UUID fabricaId) throws ValidationException {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new ValidationException("El nombre del artículo no puede estar vacío.");
         }
@@ -184,7 +185,7 @@ public class ArticuloServicio {
         if (descripcion.length() > 1000) {
             throw new ValidationException("La descripción del artículo no puede superar los 1000 caracteres.");
         }
-        if (fabrica == null || !fabricaRepositorio.existsById(fabrica.getId()))  {
+        if (fabricaId == null || !fabricaRepositorio.existsById(fabricaId))  {
             throw new ValidationException("Debe especificar una fábrica válida.");
         }
     }

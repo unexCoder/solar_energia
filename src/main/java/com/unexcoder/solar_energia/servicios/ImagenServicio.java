@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.unexcoder.solar_energia.entidades.Imagen;
 import com.unexcoder.solar_energia.excepciones.ImagenNotFoundException;
 // import com.unexcoder.solar_energia.excepciones.InvalidOperationException;
-import com.unexcoder.solar_energia.repositorios.ArticuloRepositorio;
 import com.unexcoder.solar_energia.repositorios.ImagenRepositorio;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -21,17 +20,16 @@ import org.slf4j.LoggerFactory;
 
 @Service
 public class ImagenServicio {
-
-    private final ArticuloRepositorio articuloRepositorio;
     
     @Autowired
     private ImagenRepositorio imagenRepositorio;
+    
     private static final Logger logger = LoggerFactory.getLogger(ImagenServicio.class);
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png", "image/gif");
 
-    ImagenServicio(ArticuloRepositorio articuloRepositorio) {
-        this.articuloRepositorio = articuloRepositorio;
+    ImagenServicio(ImagenRepositorio imagenRepositorio) {
+        this.imagenRepositorio = imagenRepositorio;
     }
 
     @Transactional
@@ -69,7 +67,7 @@ public class ImagenServicio {
         }  else if (file.getSize() == 0) {
             throw new IllegalArgumentException("El archivo de imagen está vacío.");
         }
-
+        
         validarArchivo(file);
 
         return imagenRepositorio.findById(id)

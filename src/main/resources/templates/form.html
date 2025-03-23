@@ -8,7 +8,7 @@
     <div class="register" th:if="${form} == 'users'">
         <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
         <form th:action="@{/registro}" method="POST" enctype="multipart/form-data">
-
+            <div th:replace="~{/fragments/msginject :: div}"></div>
             <div>
                 <img id="displayImage" class="profilePic" th:src="'/images/default_pic.png'" width="150px" onclick="document.getElementById('file').click()"/>    
                 <input type="file" id="file" name="file" accept="image/*" style="display: none;" onchange="previewImage(event)">
@@ -36,10 +36,43 @@
         </form>
     </div>
 
+
+    <div th:if="${edit} == 'users'">
+        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
+        <form th:action="@{/usuarios/perfil/editar/__${user.id}__}" method="POST" enctype="multipart/form-data">
+            <div th:replace="~{/fragments/msginject :: div}"></div>
+            <div>
+                <img id="displayImage" class="profilePic" th:src="${user.imagen != null} ? @{'/imagen/perfil/' + ${user.id}} : '/images/default_pic.png'" alt="Profile Picture" width="150px" th:value="${file}" onclick="document.getElementById('file').click()"/>    
+                <input type="file" id="file" name="file" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                <p>Click to upload picture</p>
+            </div>
+            <div>
+                <input type="email" name="email" placeholder="email" th:value="${user.email}">
+            </div>
+            <div>
+                <input type="text"  name="apellido" placeholder="apellido" th:value="${user.apellido}">
+            </div>
+            <div>
+                <input type="text"  name="nombre" placeholder="name" th:value="${user.nombre}">
+            </div>
+            <div id="password">
+                <input type="password" name="password" placeholder="password"
+                    th:value="${password}" oninput="toggleNextField()">
+            </div>
+            <div id="passwordRepeat" style="display: none;">
+                <input type="password" name="passwordRepeat" placeholder="re-enter password"
+                    th:value="${password2}">
+            </div>
+            <button class="register-buttom" type="submit">Editar usuario</button>
+        </form>
+        <p><a th:href="@{/usuarios/lista}">Cancelar</a></p>
+    </div>
+
+
     <div class="register" th:if="${form} == 'articulo'">
         <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
         <form th:action="@{/articulo/registro}" method="POST" enctype="multipart/form-data">
-
+            <div th:replace="~{/fragments/msginject :: div}"></div>
             <div>
                 <img id="displayImage" class="productImg" th:src="'/images/default_product.jpg'"
                     width="150px" onclick="document.getElementById('file').click()" />
@@ -51,7 +84,11 @@
                 <input type="text" name="nombre" placeholder="name" th:value="${nombre}">
             </div>
             <div>
-                <input type="text" name="fabrica" placeholder="fabrica" th:value="${fabrica}">
+                <select name="fabricaId">
+                    <option value="">Seleccionar Fabricante</option>
+                    <option th:each="fabrica : ${fabricas}" th:value="${fabrica.id}" th:text="${fabrica.nombre}">
+                    </option>
+                </select>
             </div>
             <div>
                 <textarea rows="4" cols="50" wrap="soft" name="descripcion" placeholder="Type your text here..." th:value="${descripcion}"></textarea>
@@ -67,12 +104,12 @@
     <div class="register" th:if="${form} == 'fabrica'">
         <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
         <form th:action="@{/fabrica/registro}" method="POST" enctype="multipart/form-data">
-
-            <!-- <div>
-                <img id="displayImage" class="profilePic" th:src="'/images/default_pic.png'" width="150px" onclick="document.getElementById('file').click()"/>    
+            <div th:replace="~{/fragments/msginject :: div}"></div>
+            <div>
+                <img id="displayImage" class="profilePic" th:src="'/images/default_product.jpg'" width="150px" th:value="${file}" onclick="document.getElementById('file').click()"/>    
                 <input type="file" id="file" name="file" accept="image/*" style="display: none;" onchange="previewImage(event)">
                 <p>Click to upload picture</p>
-            </div> -->
+            </div>
             <!-- <div>
                 <input type="email" name="email" placeholder="email" th:value="${email}">
             </div>
@@ -94,6 +131,30 @@
             <button class="register-buttom" type="submit">Registrar fábrica</button>
         </form>
     </div>
+
+    <div th:if="${edit} == 'fabrica'">
+        <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
+        <form th:action="@{/fabrica/editado/__${fabrica.id}__}" method="POST" enctype="multipart/form-data">
+            <div th:replace="~{/fragments/msginject :: div}"></div>
+            <div>
+                <img id="displayImage" class="profilePic" th:src="${fabrica.imagen != null} ? @{'/imagen/' + ${fabrica.id}} : '/images/default_product.jpg'" alt="Brand Picture" width="150px" th:value="${file}" onclick="document.getElementById('file').click()"/>    
+                <input type="file" id="file" name="file" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                <p>Click to upload picture</p>
+            </div>
+            <!-- <div>
+                <input type="email" name="email" placeholder="email" th:value="${email}">
+            </div>
+            <div>
+                <input type="text"  name="apellido" placeholder="apellido" th:value="${apellido}">
+            </div> -->
+            <div>
+                <input type="text"  name="nombre" placeholder="name" th:value="${fabrica.nombre}">
+            </div>
+            <button class="register-buttom" type="submit">Editar fábrica</button>
+        </form>
+        <p><a th:href="@{/fabrica/lista}">Cancelar</a></p>
+    </div>
+
 
 </body>
 </html>

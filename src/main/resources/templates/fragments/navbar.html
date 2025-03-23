@@ -1,0 +1,16 @@
+<nav style="display: flex;">
+    <div style="padding: 0 5px;">
+        <a th:href="@{/articulo}">Productos</a>
+        <a th:href="@{/fabrica}">Fabricantes</a>
+        <a th:href="@{/usuario}">Usuarios</a>
+        <!-- <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard/usuarios}">Usuarios</a> -->
+        <a th:href="@{/perfil/editar/id}">Editar perfil</a>
+        <!-- <a th:href="@{/perfil/editar/__${session.userSesion.id}__}">Editar perfil</a> -->
+        <a th:href="@{/logout}">Cerrar sesión</a>
+    </div>
+    <div> | </div>
+    <div style="padding: 0 5px;">
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/registrar}">Registrar</a>    
+    </div>
+</nav>

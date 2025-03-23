@@ -8,17 +8,43 @@
     <div th:if="${list} == 'users'">
         <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
         <h1>Lista de usuarios</h1>
+        <div th:if="${users} != null">
+            <div th:each="user : ${users}" style="padding: 10px 20px;">
+                <div style="display: flex;">
+                    <img th:src="${user.imagen != null} ? @{'/imagen/perfil/' + ${user.id}} : '/images/default_pic.png'" alt="Profile Picture" width="150px" height="150px" style="padding-top: 22px; padding-right: 20px;"/>
+                    <div>
+                        <h3 th:text="${user.id}"></h3>
+                        <h3 th:text="${user.apellido}"></h3>
+                        <h3 th:text="${user.nombre}"></h3>
+                        <h3 th:text="${user.email}"></h3>
+                        <h3 th:text="${user.rol}"></h3>
+                        <a th:href="@{/admin/dashboard/usuarios/__${user.id}__}"><i class="fas fa-feather-alt">
+                        </i>Cambiar rol </a>
+                    </div>
+                </div>
+                <!-- <a th:href="@{/usuarios/perfil/editar/__${user.id}__}" style="display: flex;">
+                </a> -->
+            </div>
+        </div>
     </div>
 
     <div th:if="${list} == 'fabrica'">
         <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
         <h1>Lista de fabricantes</h1>
+        <div th:if="${fabricas} != null" style="display: flex;flex-wrap: wrap;">
+            <div th:each="fabrica : ${fabricas}" style="display: flex; flex-direction: column;padding: 0 20px;">
+                    <a th:href="@{/fabrica/editar/__${fabrica.id}__}">
+                        <img th:src="${fabrica.imagen != null} ? @{'/imagen/' + ${fabrica.id}} : '/images/default_product.jpg'" alt="Brand Picture" style="width: 200px;"/>
+                        <h3 th:text="${fabrica.nombre}"></h3>
+                    </a>
+                </div>
+        </div>
     </div>
 
     <div th:if="${list} == 'articulo'">
         <!-- <h1 th:replace = "~{/fragments/logo :: h1}"></h1> -->
         <h1>Lista de productos</h1>
     </div>
-
+    
 </body>
 </html>

@@ -13,7 +13,6 @@ import com.unexcoder.solar_energia.enumeraciones.LoginRol;
 import com.unexcoder.solar_energia.excepciones.InvalidOperationException;
 import com.unexcoder.solar_energia.excepciones.UserNotFoundException;
 import com.unexcoder.solar_energia.excepciones.ValidationException;
-import com.unexcoder.solar_energia.repositorios.ArticuloRepositorio;
 import com.unexcoder.solar_energia.repositorios.UsuarioRepositorio;
 
 import java.util.ArrayList;
@@ -21,26 +20,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 
 @Service
 public class UsuarioServicio {
 
-    private final ArticuloRepositorio articuloRepositorio;
-
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private ImagenServicio imagenServicio;
 
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioServicio.class);
+    // private static final Logger logger = LoggerFactory.getLogger(UsuarioServicio.class);
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png", "image/gif");
 
-    UsuarioServicio(ArticuloRepositorio articuloRepositorio) {
-        this.articuloRepositorio = articuloRepositorio;
+    UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
+        this.usuarioRepositorio = usuarioRepositorio;
     }
     
     @Transactional
@@ -62,6 +58,7 @@ public class UsuarioServicio {
         newUser.setPassword(new BCryptPasswordEncoder().encode(password));
         newUser.setRol(LoginRol.USER);
         if (file != null && !file.isEmpty()) {
+            validarArchivo(file);
             Imagen img = imagenServicio.guardarImagen(file, "profile_pic");
             newUser.setImagen(img);
         } // If no file, imagen remains null
@@ -82,6 +79,7 @@ public class UsuarioServicio {
         // user.setPassword(password);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         if (file != null && !file.isEmpty()) {
+            validarArchivo(file);
             if (user.getImagen() != null) {
                 user.setImagen(imagenServicio.actualizarImagen(user.getImagen().getId(), file, "profile_pic"));
             } else {
