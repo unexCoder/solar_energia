@@ -13,6 +13,7 @@ import com.unexcoder.solar_energia.entidades.Imagen;
 import com.unexcoder.solar_energia.excepciones.InvalidOperationException;
 import com.unexcoder.solar_energia.excepciones.ValidationException;
 import com.unexcoder.solar_energia.repositorios.FabricaRepositorio;
+import com.unexcoder.solar_energia.utilities.ValidationUtils;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,10 +33,10 @@ public class FabricaServicio {
 
     @Transactional
     public void guardarFabrica(String nombre,MultipartFile file) throws ValidationException, InvalidOperationException{
-        validarNombre(nombre);
-        if (fabricaRepositorio.existsByNombre(nombre)) {
-            throw new IllegalArgumentException("Ya existe una fábrica con el mismo nombre.");
-        }
+        
+        // validations
+        ValidationUtils.validarNombreFabrica(nombre,fabricaRepositorio);
+        
         try {
             Fabrica fabrica = new Fabrica();
             fabrica.setNombre(nombre);
@@ -52,7 +53,7 @@ public class FabricaServicio {
     
     @Transactional
     public void editarFabrica(UUID id,String nombre, MultipartFile file) throws ValidationException, InvalidOperationException {
-        validarNombre(nombre);
+        ValidationUtils.validarNombreFabrica(nombre,fabricaRepositorio);
         Fabrica fabrica = fabricaRepositorio.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("No se encontró la fábrica con el ID: " + id));
         fabrica.setNombre(nombre.trim());
@@ -97,12 +98,12 @@ public class FabricaServicio {
     
 
     // validations
-    private void validarNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre de la fábrica no puede estar vacío.");
-        }
-        if (nombre.length() > 100) { // Adjust based on DB constraints
-            throw new IllegalArgumentException("El nombre de la fábrica no puede superar los 100 caracteres.");
-        }
-    }
+    // private void validarNombre(String nombre) {
+    //     if (nombre == null || nombre.trim().isEmpty()) {
+    //         throw new IllegalArgumentException("El nombre de la fábrica no puede estar vacío.");
+    //     }
+    //     if (nombre.length() > 100) { // Adjust based on DB constraints
+    //         throw new IllegalArgumentException("El nombre de la fábrica no puede superar los 100 caracteres.");
+    //     }
+    // }
 }

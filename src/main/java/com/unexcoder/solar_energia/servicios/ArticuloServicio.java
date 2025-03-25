@@ -13,6 +13,8 @@ import com.unexcoder.solar_energia.excepciones.ValidationException;
 import com.unexcoder.solar_energia.excepciones.NotFoundException;
 import com.unexcoder.solar_energia.repositorios.ArticuloRepositorio;
 import com.unexcoder.solar_energia.repositorios.FabricaRepositorio;
+import com.unexcoder.solar_energia.utilities.ValidationUtils;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,8 +53,11 @@ public class ArticuloServicio {
     @Transactional
     public void crearArticulo(String nombre, String descripcion, MultipartFile file, UUID fabricaId) throws ValidationException {
         // validations
-        validar(nombre, descripcion, fabricaId);
-        validarArchivo(file);
+        // validar(nombre, descripcion, fabricaId);
+        // validarArchivo(file);
+        ValidationUtils.validarArticulo(nombre, descripcion, fabricaId, fabricaRepositorio);
+        ValidationUtils.validarArchivo(file, MAX_FILE_SIZE, ALLOWED_MIME_TYPES);
+       
         try {
             Articulo articulo = new Articulo();
             articulo.setNroArticulo(generateId());
@@ -72,13 +77,13 @@ public class ArticuloServicio {
 
     @Transactional
     public void editarArticulo(UUID id ,String nombre, String descripcion, UUID fabricaId, MultipartFile file, boolean eliminarImagen) throws ValidationException,NotFoundException,InvalidOperationException {
-        validar(nombre, descripcion, fabricaId);
+        ValidationUtils.validarArticulo(nombre, descripcion, fabricaId, fabricaRepositorio);
 
         Articulo articulo = articuloRepositorio.findById(id)
             .orElseThrow(() -> new NotFoundException("No se encontró el artículo con el ID: " + id));
             
         if (file != null && !file.isEmpty()) {
-            validarArchivo(file);
+            ValidationUtils.validarArchivo(file, MAX_FILE_SIZE, ALLOWED_MIME_TYPES);
         }
 
         try {
@@ -138,14 +143,17 @@ public class ArticuloServicio {
         return articuloRepositorio.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el artículo con el ID: " + id));
     } 
+    
     // Initialized Counter from Database
     // Instead of always starting at 1, it now retrieves the highest nroArticulo 
     // from the database and continues from there.
     private Integer initCounter() {
-        return articuloRepositorio.findAll().stream()
-                .mapToInt(Articulo::getNroArticulo)
-                .max()
-                .orElse(0) + 1; // Start from the next available number
+        // return articuloRepositorio.findAll().stream()
+        //         .mapToInt(Articulo::getNroArticulo)
+        //         .max()
+        //         .orElse(0) + 1; // Start from the next available number
+        Integer maxNroArticulo =  articuloRepositorio.findMaxNroArticulo();
+        return (maxNroArticulo != null ? maxNroArticulo : 0) + 1;
     }
 
     private synchronized Integer generateId() {
@@ -153,17 +161,17 @@ public class ArticuloServicio {
     }
 
 
-    private void validarArchivo(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("El archivo de imagen no puede estar vacío.");
-        }
-        if (file.getSize() > MAX_FILE_SIZE) {
-            throw new IllegalArgumentException("El tamaño del archivo no debe superar los 5MB.");
-        }
-        if (!ALLOWED_MIME_TYPES.contains(file.getContentType())) {
-            throw new IllegalArgumentException("Formato de archivo no permitido. Solo se permiten JPG, PNG y GIF.");
-        }
-    }
+    // private void validarArchivo(MultipartFile file) {
+    //     if (file == null || file.isEmpty()) {
+    //         throw new IllegalArgumentException("El archivo de imagen no puede estar vacío.");
+    //     }
+    //     if (file.getSize() > MAX_FILE_SIZE) {
+    //         throw new IllegalArgumentException("El tamaño del archivo no debe superar los 5MB.");
+    //     }
+    //     if (!ALLOWED_MIME_TYPES.contains(file.getContentType())) {
+    //         throw new IllegalArgumentException("Formato de archivo no permitido. Solo se permiten JPG, PNG y GIF.");
+    //     }
+    // }
     
     private String sanitizarDescripcion(String descripcion, int maxChars) {
         if (descripcion != null) {
@@ -176,23 +184,23 @@ public class ArticuloServicio {
         return "";
     }
 
-    private void validar(String nombre, String descripcion, UUID fabricaId) throws ValidationException {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new ValidationException("El nombre del artículo no puede estar vacío.");
-        }
-        if (nombre.length() > 255) {
-            throw new ValidationException("El nombre del artículo no puede superar los 255 caracteres.");
-        }
-        if (descripcion == null || descripcion.trim().isEmpty()) {
-            throw new ValidationException("La descripción del artículo no puede estar vacía.");
-        }
-        if (descripcion.length() > 1000) {
-            throw new ValidationException("La descripción del artículo no puede superar los 1000 caracteres.");
-        }
-        if (fabricaId == null || !fabricaRepositorio.existsById(fabricaId))  {
-            throw new ValidationException("Debe especificar una fábrica válida.");
-        }
-    }
+    // private void validar(String nombre, String descripcion, UUID fabricaId) throws ValidationException {
+    //     if (nombre == null || nombre.trim().isEmpty()) {
+    //         throw new ValidationException("El nombre del artículo no puede estar vacío.");
+    //     }
+    //     if (nombre.length() > 255) {
+    //         throw new ValidationException("El nombre del artículo no puede superar los 255 caracteres.");
+    //     }
+    //     if (descripcion == null || descripcion.trim().isEmpty()) {
+    //         throw new ValidationException("La descripción del artículo no puede estar vacía.");
+    //     }
+    //     if (descripcion.length() > 1000) {
+    //         throw new ValidationException("La descripción del artículo no puede superar los 1000 caracteres.");
+    //     }
+    //     if (fabricaId == null || !fabricaRepositorio.existsById(fabricaId))  {
+    //         throw new ValidationException("Debe especificar una fábrica válida.");
+    //     }
+    // }
 
 
 
