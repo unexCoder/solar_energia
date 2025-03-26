@@ -1,7 +1,7 @@
 
 
 
-# Solar Energía ⚡
+# Solar ⚡ Energía
 ## v.0.0.1
 ©2025 unexcoder
 ## web-store-app

@@ -22,7 +22,24 @@ public class Seguridad {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/css/", "/js/", "/img/", "/**").permitAll())
+                .requestMatchers("/admin/**").hasRole("ADMIN") //acceso full admins
+                .requestMatchers("/css/", "/js/", "/img/", "/**").permitAll() //acceso full
+                .requestMatchers("/login","/registrar").permitAll() //acceso full admins
+                .anyRequest().authenticated() // requiere autenticar
+            )
+            .formLogin((form) -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/logincheck")
+                .defaultSuccessUrl("/inicio", true)
+                .usernameParameter("email")
+                .passwordParameter("password")
+                // .failureUrl("/login?error=true")
+                .permitAll()
+            )
+            .logout((logout) -> logout 
+                        .logoutUrl("/logout") 
+                        .logoutSuccessUrl("/") 
+                        .permitAll())
             .csrf(csrf -> csrf.disable());
         return http.build();
     }

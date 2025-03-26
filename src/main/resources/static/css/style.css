@@ -90,3 +90,45 @@ a:hover {
 .product-card-content div {
     padding: 0 0.5em;
 }
+
+input,
+select {
+    width: 300px;
+    height: 40px;
+    background: #fff;
+    color: #00535b;
+}
+
+button {
+    width: 150px;
+    height: 40px;
+    font-weight: 700;
+    background: #fff;
+    color: #00535b;
+    font-size: 1em;
+}
+
+.login,
+.register {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 50vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-buttons {
+    display: flex;
+    flex-direction: row;
+    font-weight: 700;
+    margin-top: 5px;
+}
+
+.register-buttom {
+    width: 300px;
+}
+
+.logininput {
+    margin-top: 5px;
+}

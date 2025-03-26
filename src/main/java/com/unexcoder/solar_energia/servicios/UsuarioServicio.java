@@ -1,10 +1,17 @@
 package com.unexcoder.solar_energia.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.unexcoder.solar_energia.entidades.Imagen;
@@ -16,6 +23,8 @@ import com.unexcoder.solar_energia.excepciones.ValidationException;
 import com.unexcoder.solar_energia.repositorios.UsuarioRepositorio;
 import com.unexcoder.solar_energia.utilities.ValidationUtils;
 
+import jakarta.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +34,7 @@ import java.util.UUID;
 // import org.slf4j.LoggerFactory;
 
 @Service
-public class UsuarioServicio {
+public class UsuarioServicio implements UserDetailsService {
 
     private final UsuarioRepositorio usuarioRepositorio;
 
@@ -39,6 +48,23 @@ public class UsuarioServicio {
     UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
         this.usuarioRepositorio = usuarioRepositorio;
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario user = usuarioRepositorio.buscarPorEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con el email: " + email));
+
+        List<GrantedAuthority> permisos = new ArrayList<>();
+        GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + user.getRol().toString());
+        permisos.add(p);
+
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+        session.setAttribute("userId", user.getId()); // Store user ID in session
+        session.setAttribute("sessionUser", user);    // Store full user object if needed
+        
+        return new User(user.getEmail(), user.getPassword(), permisos);
+    }
     
     @Transactional
     public void crearUsuario(String email, String nombre, String apellido, String password, String passwordRepeat,
@@ -46,16 +72,13 @@ public class UsuarioServicio {
 
         // validations
         ValidationUtils.validarNombreUsuario(nombre, apellido, email, password, passwordRepeat);
-        Usuario user = usuarioRepositorio.buscarPorEmail(email);
-        if (user != null) {
-            throw new ValidationException("El email ya está en uso.");
-        }        
+        usuarioRepositorio.buscarPorEmail(email)
+            .orElseThrow(() -> new ValidationException("El email ya está en uso."));
 
         Usuario newUser = new Usuario();
         newUser.setEmail(email);
         newUser.setNombre(nombre);
         newUser.setApellido(apellido);
-        // newUser.setPassword(password);
         newUser.setPassword(new BCryptPasswordEncoder().encode(password));
         newUser.setRol(LoginRol.USER);
         if (file != null && !file.isEmpty()) {
@@ -77,7 +100,6 @@ public class UsuarioServicio {
         user.setEmail(email);
         user.setNombre(nombre);
         user.setApellido(apellido);
-        // user.setPassword(password);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         if (file != null && !file.isEmpty()) {
             ValidationUtils.validarArchivo(file, MAX_FILE_SIZE, ALLOWED_MIME_TYPES);
@@ -123,36 +145,10 @@ public class UsuarioServicio {
         return null;
     }
 
-    // validations and service methoids
-    // private void validar(String nombre,String apellido, String email, String password, String passwordRepeat)
-    //         throws ValidationException {
-    //     if (nombre.isEmpty() || nombre == null || nombre.length() < 2) {
-    //         throw new ValidationException("El campo nombre debe ser correcto");
-    //     }
-    //     if (apellido.isEmpty() || nombre == null) {
-    //         throw new ValidationException("El campo apellido debe ser correcto");
-    //     }
-    //     if (email.isEmpty() || email == null) {
-    //         throw new ValidationException("El campo email ser correcto");
-    //     }
-    //     if (password.isEmpty() || password == null || password.length() < 8) {
-    //         throw new ValidationException("El campo password debe ser contener al menos 8 caracteres");
-    //     }
-    //     if (passwordRepeat.isEmpty() || passwordRepeat == null || !passwordRepeat.equals(password)) {
-    //         throw new ValidationException("El password debe coincidir con el anterior");
-    //     }
-    // }
-
-    // private void validarArchivo(MultipartFile file) {
-    //     if (file == null || file.isEmpty()) {
-    //         throw new IllegalArgumentException("El archivo de imagen no puede estar vacío.");
-    //     }
-    //     if (file.getSize() > MAX_FILE_SIZE) {
-    //         throw new IllegalArgumentException("El tamaño del archivo no debe superar los 5MB.");
-    //     }
-    //     if (!ALLOWED_MIME_TYPES.contains(file.getContentType())) {
-    //         throw new IllegalArgumentException("Formato de archivo no permitido. Solo se permiten JPG, PNG y GIF.");
-    //     }
-    // }
+    @Transactional(readOnly = true)
+    public Usuario buscarPorEmail(String email) throws UserNotFoundException {
+        return usuarioRepositorio.buscarPorEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("No se encontró el usuario con el email: " + email));
+    }
 
 }

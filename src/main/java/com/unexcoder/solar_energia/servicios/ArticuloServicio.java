@@ -160,19 +160,6 @@ public class ArticuloServicio {
         return counter.getAndIncrement(); // Returns current value and increments
     }
 
-
-    // private void validarArchivo(MultipartFile file) {
-    //     if (file == null || file.isEmpty()) {
-    //         throw new IllegalArgumentException("El archivo de imagen no puede estar vacío.");
-    //     }
-    //     if (file.getSize() > MAX_FILE_SIZE) {
-    //         throw new IllegalArgumentException("El tamaño del archivo no debe superar los 5MB.");
-    //     }
-    //     if (!ALLOWED_MIME_TYPES.contains(file.getContentType())) {
-    //         throw new IllegalArgumentException("Formato de archivo no permitido. Solo se permiten JPG, PNG y GIF.");
-    //     }
-    // }
-    
     private String sanitizarDescripcion(String descripcion, int maxChars) {
         if (descripcion != null) {
             descripcion = descripcion.trim();
@@ -183,26 +170,6 @@ public class ArticuloServicio {
         }
         return "";
     }
-
-    // private void validar(String nombre, String descripcion, UUID fabricaId) throws ValidationException {
-    //     if (nombre == null || nombre.trim().isEmpty()) {
-    //         throw new ValidationException("El nombre del artículo no puede estar vacío.");
-    //     }
-    //     if (nombre.length() > 255) {
-    //         throw new ValidationException("El nombre del artículo no puede superar los 255 caracteres.");
-    //     }
-    //     if (descripcion == null || descripcion.trim().isEmpty()) {
-    //         throw new ValidationException("La descripción del artículo no puede estar vacía.");
-    //     }
-    //     if (descripcion.length() > 1000) {
-    //         throw new ValidationException("La descripción del artículo no puede superar los 1000 caracteres.");
-    //     }
-    //     if (fabricaId == null || !fabricaRepositorio.existsById(fabricaId))  {
-    //         throw new ValidationException("Debe especificar una fábrica válida.");
-    //     }
-    // }
-
-
 
     /*
     to consider for further refinement:

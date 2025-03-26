@@ -85,7 +85,6 @@ public class FabricaServicio {
         return fabricas;
     }
 
-
     @Transactional(readOnly = true)
     public Fabrica getOne(UUID id) {
         Optional<Fabrica> f = fabricaRepositorio.findById(id);
@@ -96,14 +95,4 @@ public class FabricaServicio {
         return null;
     }
     
-
-    // validations
-    // private void validarNombre(String nombre) {
-    //     if (nombre == null || nombre.trim().isEmpty()) {
-    //         throw new IllegalArgumentException("El nombre de la fábrica no puede estar vacío.");
-    //     }
-    //     if (nombre.length() > 100) { // Adjust based on DB constraints
-    //         throw new IllegalArgumentException("El nombre de la fábrica no puede superar los 100 caracteres.");
-    //     }
-    // }
 }

@@ -34,7 +34,6 @@ public class UsuarioControlador {
         return "list.html";
     }
     
-    
     @GetMapping("/perfil/editar/{id}")
     public String editar(@PathVariable String id,ModelMap model) {
         model.put("edit", "users");

@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.unexcoder.solar_energia.entidades.Imagen;
 import com.unexcoder.solar_energia.excepciones.ImagenNotFoundException;
-// import com.unexcoder.solar_energia.excepciones.InvalidOperationException;
 import com.unexcoder.solar_energia.repositorios.ImagenRepositorio;
 import com.unexcoder.solar_energia.utilities.ValidationUtils;
 
@@ -93,18 +92,6 @@ public class ImagenServicio {
             .orElseThrow(() -> new ImagenNotFoundException("Imagen no encontrada con el ID: " + id));
         imagenRepositorio.deleteById(imagen.getId());
     }
-
-    // private void validarArchivo(MultipartFile file) {
-    //     if (file == null || file.isEmpty()) {
-    //         throw new IllegalArgumentException("El archivo de imagen no puede estar vacío.");
-    //     }
-    //     if (file.getSize() > MAX_FILE_SIZE) {
-    //         throw new IllegalArgumentException("El tamaño del archivo no debe superar los 5MB.");
-    //     }
-    //     if (!ALLOWED_MIME_TYPES.contains(file.getContentType())) {
-    //         throw new IllegalArgumentException("Formato de archivo no permitido. Solo se permiten JPG, PNG y GIF.");
-    //     }
-    // }
 
     private String sanitizarDescripcion(String descripcion) {
         if (descripcion != null) {
