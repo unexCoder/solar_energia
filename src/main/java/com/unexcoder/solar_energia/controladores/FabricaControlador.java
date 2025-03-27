@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class FabricaControlador {
     @Autowired
     private FabricaServicio fabricaServicio;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
         model.put("form","fabrica");
@@ -59,6 +61,7 @@ public class FabricaControlador {
         return "list.html";
     }
     
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable String id, ModelMap model) {
         model.put("edit","fabrica");

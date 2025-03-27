@@ -38,28 +38,40 @@ public class PortalControlador {
         return "index.html";
     }
 
+    @PreAuthorize("!isAuthenticated() || hasRole('ROLE_ADMIN')")
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
         model.put("form", "users");
         return "form.html";
     }
 
+    @PreAuthorize("!isAuthenticated()")
     @PostMapping("/registro")
     public String registro(@RequestParam String email, @RequestParam String apellido,
             @RequestParam String nombre, @RequestParam String password,
             @RequestParam String passwordRepeat, @RequestParam MultipartFile file,
-            ModelMap model) throws InvalidOperationException {
+            ModelMap model) {
+        
         model.put("form", "users");
+        
+        // Add these to preserve form data on error
+        model.addAttribute("email", email);
+        model.addAttribute("apellido", apellido);
+        model.addAttribute("nombre", nombre);
+        
         try {
             usuarioServicio.crearUsuario(email, nombre, apellido, password, passwordRepeat, file);
             model.put("exito", "Usuario registrado correctamente");
+            // Clear form data after success
+            model.addAttribute("email", null);
+            model.addAttribute("apellido", null);
+            model.addAttribute("nombre", null);
             return "form.html";
-        } catch (ValidationException e) {
+        } catch (ValidationException | InvalidOperationException e) {
             model.put("error", e.getMessage());
-            model.put("email", email);
-            model.put("apellido", apellido);
-            model.put("nombre", nombre);
-            model.put("password", password);
+            return "form.html";
+        } catch (Exception e) {
+            model.put("error", "Error inesperado al registrar usuario");
             return "form.html";
         }
     }
@@ -79,8 +91,8 @@ public class PortalControlador {
         System.out.println(logged.getId());
         if (logged.getRol().toString().equals("ADMIN")) {
             // return "redirect:/admin/dashboard";
-            return "index.html";
+            return "redirect:/";
         }
-        return "index.html";
+        return "redirect:/";
     }
 }

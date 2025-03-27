@@ -70,7 +70,7 @@
                 </div>
                 <button class="register-buttom" type="submit">Editar usuario</button>
             </form>
-            <p><a th:href="@{/usuarios/lista}">Cancelar</a></p>
+            <p><a th:href="@{/inicio}">Cancelar</a></p>
         </div>
     </div>
 
@@ -140,7 +140,7 @@
 
 
     <div class="container">
-        <div class="register" th:if="${form} == 'fabrica'">
+        <div th:if="${form} == 'fabrica'">
             <h3>Registrar fábrica</h3>
             <form th:action="@{/fabrica/registro}" method="POST" enctype="multipart/form-data">
                 <div th:replace="~{/fragments/msginject :: div}"></div>

@@ -70,10 +70,12 @@ public class UsuarioServicio implements UserDetailsService {
     public void crearUsuario(String email, String nombre, String apellido, String password, String passwordRepeat,
             MultipartFile file) throws ValidationException, InvalidOperationException{
 
-        // validations
+        // Check for existing email first
+        if (usuarioRepositorio.buscarPorEmail(email).isPresent()) {
+            throw new ValidationException("El email ya está registrado en el sistema");
+        }
+        // Other validations
         ValidationUtils.validarNombreUsuario(nombre, apellido, email, password, passwordRepeat);
-        usuarioRepositorio.buscarPorEmail(email)
-            .orElseThrow(() -> new ValidationException("El email ya está en uso."));
 
         Usuario newUser = new Usuario();
         newUser.setEmail(email);
@@ -85,7 +87,7 @@ public class UsuarioServicio implements UserDetailsService {
             ValidationUtils.validarArchivo(file, MAX_FILE_SIZE, ALLOWED_MIME_TYPES);
             Imagen img = imagenServicio.guardarImagen(file, "profile_pic");
             newUser.setImagen(img);
-        } // If no file, imagen remains null
+        }
         usuarioRepositorio.save(newUser);
     }
 

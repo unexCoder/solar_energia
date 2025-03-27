@@ -8,7 +8,14 @@
 
 
     <div th:if="${list} == 'users'" class="list-container">        
-        <h3>Lista de usuarios</h3>
+        <nav class="navbar">
+            <div>
+                <h3>Lista de usuarios</h3>
+            </div>
+            <div>
+                <h3 sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/registrar}">Agregar usuario</a></h3>
+            </div>
+        </nav>
         <div th:if="${users} != null">
             <div th:each="user : ${users}" class="user-card">
                 <div class="user-card-content">
@@ -23,6 +30,12 @@
                         </i>Cambiar rol </a>
                     </div>
                 </div>
+                <div>
+                    <!-- implementar paginacion -->
+                    <!-- <a th:href="@{/usuarios/lista(page=${page - 1})}" th:if="${page > 0}">Previous</a> -->
+                    <!-- <span th:text="${page}"></span> -->
+                    <!-- <a th:href="@{/usuarios/lista(page=${page + 1})}" th:if="${page < totalPages - 1}">Next</a> -->
+                </div>
                 <!-- <a th:href="@{/usuarios/perfil/editar/__${user.id}__}" style="display: flex;">
                 </a> -->
             </div>
@@ -30,29 +43,66 @@
     </div>
 
     <div th:if="${list} == 'fabrica'" class="container">
-        <h3>Lista de fabricantes</h3>
+        <nav class="navbar">
+            <div>
+                <h3>Lista de fabricantes</h3>
+            </div>
+            <div>
+                <h3 sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/fabrica/registrar}">Agregar proveedor</a></h3>
+            </div>
+        </nav>
         <div th:if="${fabricas} != null" style="display: flex;flex-wrap: wrap;">
             <div th:each="fabrica : ${fabricas}" class="card">
-                    <a th:href="@{/fabrica/editar/__${fabrica.id}__}">
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/fabrica/editar/__${fabrica.id}__}">
                         <img th:src="${fabrica.imagen != null} ? @{'/imagen/' + ${fabrica.id}} : '/images/default_product.jpg'" alt="Brand Picture" style="width: 200px;"/>
                         <h3 th:text="${fabrica.nombre}"></h3>
                     </a>
+                    <div sec:authorize="!hasRole('ROLE_ADMIN')" th:href="@{/fabrica/editar/__${fabrica.id}__}">
+                        <img th:src="${fabrica.imagen != null} ? @{'/imagen/' + ${fabrica.id}} : '/images/default_product.jpg'" alt="Brand Picture" style="width: 200px;"/>
+                        <h3 th:text="${fabrica.nombre}"></h3>
+                    </div>
+                    <div>
+                        <!-- implementar paginacion -->
+                        <!-- <a th:href="@{/fabrica/lista(page=${page - 1})}" th:if="${page > 0}">Previous</a> -->
+                        <!-- <span th:text="${page}"></span> -->
+                        <!-- <a th:href="@{/fabrica/lista(page=${page + 1})}" th:if="${page < totalPages - 1}">Next</a> -->
+                    </div>
             </div>
         </div>
     </div>
 
     <div th:if="${list} == 'articulo'" class="list-container">
-        <h3>Lista de productos</h3>
+        <nav class="navbar">
+            <div>
+                <h3>Lista de productos</h3>
+            </div>
+            <div>
+                <h3 sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/articulo/registrar}">Agregar producto</a></h3>
+            </div>
+        </nav>
         <div th:if="${articulos} != null">
             <div th:each="producto : ${articulos}" class="product-card">
-                <a th:href="@{/articulo/editar/__${producto.id}__}" class="product-card-content">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/articulo/editar/__${producto.id}__}" class="product-card-content">
                     <img th:src="${producto.imagen != null} ? @{'/imagen/articulo/' + ${producto.id}} : '/images/default_product.jpg'" alt="Product Picture" width="200px"/>
                     <div>
                         <h3 th:text="${producto.nombreArticulo}"></h3>
                         <p th:text="${producto.descripcion}"></p>
                     </div>
                 </a>
+                <div sec:authorize="!hasRole('ROLE_ADMIN')" th:href="@{/articulo/editar/__${producto.id}__}" class="product-card-content">
+                    <img th:src="${producto.imagen != null} ? @{'/imagen/articulo/' + ${producto.id}} : '/images/default_product.jpg'" alt="Product Picture" width="200px"/>
+                    <div>
+                        <h3 th:text="${producto.nombreArticulo}"></h3>
+                        <p th:text="${producto.descripcion}"></p>
+                    </div>
                 </div>
+                <div>
+                    <!-- implementar paginacion -->
+                    <!-- <a th:href="@{/articulo/lista(page=${page - 1})}" th:if="${page > 0}">Previous</a> -->
+                    <!-- <span th:text="${page}"></span> -->
+                    <!-- <a th:href="@{/articulo/lista(page=${page + 1})}" th:if="${page < totalPages - 1}">Next</a> -->
+                </div>
+            </div>
         </div>
     </div>
     
