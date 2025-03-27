@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unexcoder.solar_energia.entidades.Fabrica;
@@ -15,6 +15,8 @@ import com.unexcoder.solar_energia.excepciones.ValidationException;
 import com.unexcoder.solar_energia.repositorios.FabricaRepositorio;
 import com.unexcoder.solar_energia.utilities.ValidationUtils;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,13 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@RequiredArgsConstructor
 public class FabricaServicio {
     
-    @Autowired
-    private FabricaRepositorio fabricaRepositorio;
+    // @Autowired
+    private final FabricaRepositorio fabricaRepositorio;
 
-    @Autowired
-    private ImagenServicio imagenServicio;
+    // @Autowired
+    private final ImagenServicio imagenServicio;
     private static final Logger logger = LoggerFactory.getLogger(FabricaServicio.class);
 
     @Transactional

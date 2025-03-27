@@ -1,6 +1,6 @@
 package com.unexcoder.solar_energia.servicios;
 
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +24,7 @@ import com.unexcoder.solar_energia.repositorios.UsuarioRepositorio;
 import com.unexcoder.solar_energia.utilities.ValidationUtils;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,20 +35,23 @@ import java.util.UUID;
 // import org.slf4j.LoggerFactory;
 
 @Service
+// Lombok's RequiredArgsConstructor generates a constructor with all required fields
+@RequiredArgsConstructor
 public class UsuarioServicio implements UserDetailsService {
 
     private final UsuarioRepositorio usuarioRepositorio;
+    private final ImagenServicio imagenServicio;
 
-    @Autowired
-    private ImagenServicio imagenServicio;
+    // @Autowired
+    // private ImagenServicio imagenServicio;
 
     // private static final Logger logger = LoggerFactory.getLogger(UsuarioServicio.class);
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png", "image/gif");
 
-    UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
-        this.usuarioRepositorio = usuarioRepositorio;
-    }
+    // UsuarioServicio(UsuarioRepositorio usuarioRepositorio) {
+    //     this.usuarioRepositorio = usuarioRepositorio;
+    // }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

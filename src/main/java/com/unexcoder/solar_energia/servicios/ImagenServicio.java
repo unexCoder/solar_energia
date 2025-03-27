@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,24 +13,27 @@ import com.unexcoder.solar_energia.excepciones.ImagenNotFoundException;
 import com.unexcoder.solar_energia.repositorios.ImagenRepositorio;
 import com.unexcoder.solar_energia.utilities.ValidationUtils;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@RequiredArgsConstructor
 public class ImagenServicio {
     
-    @Autowired
-    private ImagenRepositorio imagenRepositorio;
+    // @Autowired
+    private final ImagenRepositorio imagenRepositorio;
     
     private static final Logger logger = LoggerFactory.getLogger(ImagenServicio.class);
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png", "image/gif");
 
-    ImagenServicio(ImagenRepositorio imagenRepositorio) {
-        this.imagenRepositorio = imagenRepositorio;
-    }
+    // ImagenServicio(ImagenRepositorio imagenRepositorio) {
+    //     this.imagenRepositorio = imagenRepositorio;
+    // }
 
     @Transactional
     public Imagen guardarImagen(MultipartFile file, String descripcion) {
