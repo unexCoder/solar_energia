@@ -5,7 +5,7 @@
     
     <div th:replace = "~{/fragments/banner :: div}"> </div>
     <header th:replace = "~{/fragments/header :: header}"> </header>
-    
+    <p th:if="${session.sessionUser != null}" th:text=" 'Hola de vuelta '+ ${session.sessionUser.nombre} "></p>
     <div th:if="${fabricas} != null" class="container">
         <div th:each="fabrica : ${fabricas}" class="card">
             <img th:src="${fabrica.imagen != null} ? @{'/imagen/' + ${fabrica.id}} : '/images/default_product.jpg'" alt="Brand Picture" style="width: 200px;"/>
